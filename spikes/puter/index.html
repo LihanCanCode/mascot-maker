@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puter.js image spike</title>
+<style>
+  :root { --bg:#fafaf7; --fg:#1d1d1b; --muted:#5b5b55; --line:#cfcfc6; --accent:#1b5e20; --err:#a4161a; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1b1b19; --fg:#f1f1ec; --muted:#b0b0a6; --line:#47473f; --accent:#8bd18f; --err:#ff8a8d; } }
+  body { margin:0 auto; padding:16px; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, sans-serif; max-width:1000px; }
+  h1 { font-size:1.4rem; } h2 { font-size:1.1rem; margin-top:1.6rem; }
+  fieldset { border:1px solid var(--line); border-radius:8px; margin:0 0 12px; padding:12px; }
+  label { display:block; margin:8px 0 2px; font-weight:600; }
+  label.inline { display:inline-flex; gap:6px; align-items:center; font-weight:400; }
+  textarea, select, input[type=file] { width:100%; box-sizing:border-box; font:inherit; color:inherit; background:transparent; border:1px solid var(--line); border-radius:6px; padding:6px; }
+  button { font:inherit; padding:8px 14px; border-radius:6px; border:1px solid var(--accent); background:transparent; color:var(--accent); cursor:pointer; margin:4px 6px 4px 0; }
+  button:hover:not(:disabled) { background:var(--accent); color:var(--bg); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  :focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+  .muted { color:var(--muted); font-size:.9rem; }
+  .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  figure { margin:0; } figure img { max-width:100%; height:auto; border:1px solid var(--line); }
+  pre { border:1px solid var(--line); border-radius:6px; padding:8px; overflow:auto; max-height:260px; font-size:.85rem; white-space:pre-wrap; }
+  .err { color:var(--err); font-weight:600; }
+</style>
+</head>
+<body>
+<h1>Puter.js image generation spike</h1>
+<p class="muted">Developer experiment for mascot-maker. Not part of the app. Loads Puter.js from its CDN and uses your own Puter account.</p>
+
+<fieldset>
+  <legend>Account</legend>
+  <button id="signin" type="button">Sign in with Puter</button>
+  <span id="user" role="status" aria-live="polite">Not signed in.</span>
+  <a href="https://puter.com/dashboard#usage" target="_blank" rel="noopener">Open Puter dashboard usage</a>
+  <button id="usage" type="button">Refresh monthly usage here</button>
+  <pre id="usage-out" aria-label="Monthly usage" hidden></pre>
+</fieldset>
+
+<fieldset>
+  <legend>Brief</legend>
+  <label for="describe">Character description</label>
+  <textarea id="describe" rows="3">an orange fox with a white belly, big fluffy tail and a green scarf</textarea>
+  <label for="style">Style</label>
+  <select id="style">
+    <option value="colour">Storybook (colour)</option>
+    <option value="anime">Chibi anime</option>
+    <option value="cartoon">Cartoon</option>
+  </select>
+  <p><label class="inline"><input type="checkbox" id="use-photo"> Use my photo</label></p>
+  <input type="file" id="photo" accept="image/*" aria-label="Photo file" disabled>
+  <p class="muted" id="photo-note"></p>
+</fieldset>
+
+<fieldset>
+  <legend>Model</legend>
+  <label for="model">Gemini model</label>
+  <select id="model">
+    <option value="gemini-3.1-flash-image">gemini-3.1-flash-image (default)</option>
+    <option value="gemini-3-pro-image">gemini-3-pro-image</option>
+    <option value="gemini-3.1-flash-lite-image">gemini-3.1-flash-lite-image</option>
+  </select>
+  <label for="quality">Quality tier (Flash default on Puter is 512, too small for the 1024px sheets)</label>
+  <select id="quality"></select>
+  <p><label class="inline"><input type="checkbox" id="test-mode"> Test mode (sample image, spends no credit)</label></p>
+</fieldset>
+
+<div>
+  <button id="step1" type="button">Step 1: Generate directions sheet</button>
+  <button id="step2" type="button" disabled>Step 2: Generate reactions sheet</button>
+  <span id="status" role="status" aria-live="polite"></span>
+</div>
+
+<h2>Results</h2>
+<div class="row">
+  <figure><figcaption id="cap1">Directions sheet: none yet</figcaption><div id="out1"></div></figure>
+  <figure><figcaption id="cap2">Reactions sheet: none yet</figcaption><div id="out2"></div></figure>
+</div>
+<p>
+  <button id="dl1" type="button" disabled>Download directions</button>
+  <button id="dl2" type="button" disabled>Download reactions</button>
+  <button id="dlboth" type="button" disabled>Download both</button>
+</p>
+<p class="muted">Check with the real checker: download both, then drop them into the upload step of the main app at
+  <a href="http://127.0.0.1:5173/" target="_blank" rel="noopener">http://127.0.0.1:5173/</a>.</p>
+
+<h2>Log</h2>
+<pre id="log" aria-label="Generation log" aria-live="polite"></pre>
+
+<script src="https://js.puter.com/v2/"></script>
+<script src="./app.js"></script>
+</body>
+</html>

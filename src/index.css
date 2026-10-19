@@ -1,0 +1,235 @@
+@import './ui/styles/components.css';
+@import './ui/styles/steps.css';
+@import './gallery/gallery.css';
+
+/*
+  Mascot Maker design tokens.
+  Identity: a sticker sheet. Lilac paper, deep indigo ink, one violet to act on, one sun-yellow to highlight.
+  Cards are die-cut stickers (ink outline plus a hard offset shadow). The shadow collapses when pressed.
+*/
+:root {
+  --paper: #f2f0ff;
+  --surface: #ffffff;
+  --surface-2: #e8e4ff;
+  --ink: #1b1740;
+  --ink-soft: #4a4575;
+  --line: #1b1740;
+  --violet: #4a34d8;
+  --violet-ink: #ffffff;
+  --sun: #ffcf33;
+  --sun-ink: #1b1740;
+  --good: #0d6b43;
+  --good-bg: #d9f5e6;
+  --warn: #7a4200;
+  --warn-bg: #ffecc2;
+  --bad: #b3261e;
+  --bad-bg: #ffe0dd;
+  --focus: #1b1740;
+  --focus-halo: #ffcf33;
+  --checker-a: #ffffff;
+  --checker-b: #dcd7f7;
+
+  --font: 'Nunito', ui-rounded, 'SF Pro Rounded', 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, monospace;
+
+  /* type scale, ratio 1.25 */
+  --t-sm: 0.875rem;
+  --t-base: 1rem;
+  --t-lg: 1.25rem;
+  --t-xl: 1.563rem;
+  --t-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.44rem);
+
+  /* spacing, 4px base with deliberate jumps */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2.25rem;
+  --s-7: 3.5rem;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --stroke: 2px;
+  --pop: 4px 4px 0 var(--ink);
+  --pop-small: 2px 2px 0 var(--ink);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur: 140ms;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #14112b;
+    --surface: #1f1b42;
+    --surface-2: #2a255a;
+    --ink: #f0eeff;
+    --ink-soft: #bdb7ea;
+    --line: #8d84d6;
+    --violet: #a99cff;
+    --violet-ink: #14112b;
+    --sun: #ffd84d;
+    --sun-ink: #14112b;
+    --good: #7be3b1;
+    --good-bg: #123d2b;
+    --warn: #ffd98a;
+    --warn-bg: #4a3300;
+    --bad: #ff9d96;
+    --bad-bg: #4a1714;
+    --focus: #ffd84d;
+    --focus-halo: #14112b;
+    --checker-a: #2d2860;
+    --checker-b: #221e4c;
+    --pop: 4px 4px 0 #050310;
+    --pop-small: 2px 2px 0 #050310;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: #14112b;
+  --surface: #1f1b42;
+  --surface-2: #2a255a;
+  --ink: #f0eeff;
+  --ink-soft: #bdb7ea;
+  --line: #8d84d6;
+  --violet: #a99cff;
+  --violet-ink: #14112b;
+  --sun: #ffd84d;
+  --sun-ink: #14112b;
+  --good: #7be3b1;
+  --good-bg: #123d2b;
+  --warn: #ffd98a;
+  --warn-bg: #4a3300;
+  --bad: #ff9d96;
+  --bad-bg: #4a1714;
+  --focus: #ffd84d;
+  --focus-halo: #14112b;
+  --checker-a: #2d2860;
+  --checker-b: #221e4c;
+  --pop: 4px 4px 0 #050310;
+  --pop-small: 2px 2px 0 #050310;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--t-base);
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  display: contents;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--s-3);
+}
+
+h2 {
+  font-size: var(--t-2xl);
+}
+
+h3 {
+  font-size: var(--t-lg);
+}
+
+p {
+  margin: 0 0 var(--s-3);
+  max-width: 68ch;
+}
+
+a {
+  color: var(--violet);
+}
+
+pre,
+code {
+  font-family: var(--font-mono);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--focus-halo);
+}
+
+h2:focus,
+main:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--s-4);
+  top: -4rem;
+  background: var(--sun);
+  color: var(--sun-ink);
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-sm);
+  font-weight: 800;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: var(--s-3);
+}
+
+.muted {
+  color: var(--ink-soft);
+  font-size: var(--t-sm);
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: var(--s-5) var(--s-4) var(--s-7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

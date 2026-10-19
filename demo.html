@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="A made-up coffee roaster's landing page, showing a mascot that follows your cursor." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d2430'/%3E%3Cpath d='M4 20q4-5 8 0t8 0 8 0' stroke='%23e4eeeb' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='11' r='3' fill='%23ff8f85'/%3E%3C/svg%3E" />
+    <title>Low Tide Coffee Roasters - small-batch coffee, roasted Tuesday</title>
+    <link rel="stylesheet" href="/src/demo/demo.css" />
+  </head>
+  <body>
+    <a class="skip" href="#roasts">Skip to this week's roasts</a>
+
+    <header class="bar">
+      <a class="wordmark" href="#top" id="top">Low Tide</a>
+      <nav aria-label="Sections" class="bar-nav">
+        <a href="#roasts">Roasts</a>
+        <a href="#curve">Roast curve</a>
+        <a href="#brew">Brew guide</a>
+        <a href="#plans">Plans</a>
+      </nav>
+      <button type="button" class="theme-btn" id="theme-btn">Switch to dark theme</button>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="perch">
+          <page-mascot
+            id="mascot"
+            directions="mascots/fox-directions.webp"
+            reactions="mascots/fox-reactions.webp"
+            size="200"
+            label="Fox"
+          ></page-mascot>
+          <div class="shelf" aria-hidden="true">
+            <span class="cup"></span>
+          </div>
+        </div>
+        <div class="hero-copy">
+          <h1 id="hero-title">Roasted Tuesday. On your counter by Thursday.</h1>
+          <p class="lead">
+            Low Tide roasts small batches of single-origin coffee in Falmouth, Maine, and ships every bag within
+            48 hours of the roast. Three coffees a week, never more.
+          </p>
+          <p class="hero-actions">
+            <a class="btn btn-solid" href="#roasts">See this week's roasts</a>
+            <a class="btn" href="#curve">How we roast</a>
+          </p>
+        </div>
+      </section>
+
+      <section id="roasts" class="block" aria-labelledby="roasts-title">
+        <h2 id="roasts-title">This week's roasts</h2>
+        <p class="block-lead">Roasted on Tuesday 14 October. Ordered by Wednesday noon, they ship that afternoon.</p>
+        <ul class="bags">
+          <li class="bag bag-light">
+            <p class="bag-origin">Ethiopia, Guji</p>
+            <h3>Hambela Natural</h3>
+            <p class="bag-notes">Blueberry jam, jasmine, black tea</p>
+            <dl class="facts">
+              <div><dt>Altitude</dt><dd>2,100 m</dd></div>
+              <div><dt>Process</dt><dd>Natural, 21 days on raised beds</dd></div>
+              <div><dt>Roast</dt><dd><span class="dots" role="img" aria-label="Light roast, 1 of 3"><i class="on"></i><i></i><i></i></span> Light</dd></div>
+            </dl>
+            <p class="price">$19 <span>250 g</span></p>
+          </li>
+          <li class="bag bag-medium">
+            <p class="bag-origin">Colombia, Huila</p>
+            <h3>La Esperanza Washed</h3>
+            <p class="bag-notes">Red apple, panela, milk chocolate</p>
+            <dl class="facts">
+              <div><dt>Altitude</dt><dd>1,750 m</dd></div>
+              <div><dt>Process</dt><dd>Washed, 36 hour ferment</dd></div>
+              <div><dt>Roast</dt><dd><span class="dots" role="img" aria-label="Medium roast, 2 of 3"><i class="on"></i><i class="on"></i><i></i></span> Medium</dd></div>
+            </dl>
+            <p class="price">$17 <span>250 g</span></p>
+          </li>
+          <li class="bag bag-dark">
+            <p class="bag-origin">Indonesia, Gayo</p>
+            <h3>Mandheling Wet-Hulled</h3>
+            <p class="bag-notes">Cedar, dark cocoa, brown sugar</p>
+            <dl class="facts">
+              <div><dt>Altitude</dt><dd>1,400 m</dd></div>
+              <div><dt>Process</dt><dd>Wet-hulled, cooperative lot</dd></div>
+              <div><dt>Roast</dt><dd><span class="dots" role="img" aria-label="Dark roast, 3 of 3"><i class="on"></i><i class="on"></i><i class="on"></i></span> Dark</dd></div>
+            </dl>
+            <p class="price">$16 <span>250 g</span></p>
+          </li>
+        </ul>
+      </section>
+
+      <section id="curve" class="block block-tinted" aria-labelledby="curve-title">
+        <h2 id="curve-title">What a Tuesday roast looks like</h2>
+        <figure class="curve">
+          <svg viewBox="0 0 640 300" role="img" aria-labelledby="curve-svg-title curve-svg-desc" class="curve-svg">
+            <title id="curve-svg-title">Roast curve for the Hambela Natural</title>
+            <desc id="curve-svg-desc">
+              Bean temperature climbs from 200 degrees Celsius at the start, dips to 98 degrees at one minute,
+              reaches 150 degrees at the end of drying at 4 minutes 30 seconds, hits first crack at 196 degrees at
+              9 minutes 10 seconds, and is dropped at 205 degrees at 11 minutes 20 seconds.
+            </desc>
+            <g class="grid-lines">
+              <line x1="60" y1="40" x2="620" y2="40" />
+              <line x1="60" y1="110" x2="620" y2="110" />
+              <line x1="60" y1="180" x2="620" y2="180" />
+              <line x1="60" y1="250" x2="620" y2="250" />
+            </g>
+            <g class="axis-labels">
+              <text x="52" y="44" text-anchor="end">220</text>
+              <text x="52" y="114" text-anchor="end">180</text>
+              <text x="52" y="184" text-anchor="end">140</text>
+              <text x="52" y="254" text-anchor="end">100</text>
+              <text x="60" y="276">0:00</text>
+              <text x="250" y="276">4:00</text>
+              <text x="440" y="276">8:00</text>
+              <text x="590" y="276">12:00</text>
+            </g>
+            <path class="curve-line" d="M60 40 C 80 160, 96 252, 110 252 C 170 252, 230 200, 290 168 C 370 128, 450 92, 520 74 C 560 66, 590 62, 610 60" />
+            <g class="markers">
+              <circle cx="258" cy="190" r="6" />
+              <circle cx="496" cy="78" r="6" />
+              <circle cx="585" cy="62" r="6" />
+            </g>
+            <g class="marker-labels">
+              <text x="268" y="212">Drying ends 4:30, 150°C</text>
+              <text x="486" y="62" text-anchor="end">First crack 9:10, 196°C</text>
+              <text x="600" y="96" text-anchor="end" class="drop">Drop 11:20, 205°C</text>
+            </g>
+          </svg>
+          <figcaption>
+            We drop light roasts about two minutes after first crack begins, which keeps the fruit and keeps the
+            sweetness. Darker coffees run a minute or two longer.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section id="brew" class="block" aria-labelledby="brew-title">
+        <h2 id="brew-title">Brew guide</h2>
+        <div class="brew">
+          <div class="calc" role="group" aria-labelledby="calc-title" id="calc">
+            <h3 id="calc-title">How much coffee do I need?</h3>
+            <label for="cups">Cups of 250 ml: <strong id="cups-value">2</strong></label>
+            <input id="cups" type="range" min="1" max="8" step="1" value="2" />
+            <p class="calc-out" role="status" id="calc-out">Use 31 g of coffee and 500 g of water.</p>
+            <p class="calc-note">A 1:16 ratio. Add 1 g of coffee for each cup if you like it stronger.</p>
+          </div>
+          <ol class="steps">
+            <li>Heat the water to 94°C, about 30 seconds off the boil.</li>
+            <li>Grind to the texture of coarse sand and wet the filter.</li>
+            <li>Pour twice the coffee's weight in water, wait 40 seconds, then pour slowly in circles.</li>
+            <li>Finish by 3:00. Swirl, wait a minute, and drink while it is warm.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="plans" class="block block-tinted" aria-labelledby="plans-title">
+        <h2 id="plans-title">Plans</h2>
+        <ul class="plans">
+          <li>
+            <h3>One bag</h3>
+            <p class="plan-price">$17</p>
+            <p>Pick any coffee, once. No account needed.</p>
+          </li>
+          <li class="plan-best">
+            <h3>Every two weeks</h3>
+            <p class="plan-price">$16 <span>a bag</span></p>
+            <p>We choose the coffee, you skip or pause any time before Tuesday.</p>
+          </li>
+          <li>
+            <h3>Every week</h3>
+            <p class="plan-price">$15 <span>a bag</span></p>
+            <p>For households that drink a lot. Free shipping included.</p>
+          </li>
+        </ul>
+        <p><a class="btn btn-solid" href="#roasts">Pick your coffee</a></p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p class="foot-line">Low Tide Coffee Roasters, 14 Wharf Lane, Falmouth, Maine 04105. Cupping room open Saturdays 9 to 1.</p>
+      <p class="foot-demo">
+        This is a demo page. The coffee, prices and address are made up. The mascot is the
+        <code>&lt;page-mascot&gt;</code> element from Mascot Maker, art by Kamran Ahmed (MIT).
+      </p>
+    </footer>
+
+    <aside class="picker" id="picker" aria-labelledby="picker-title">
+      <div class="picker-head">
+        <h2 id="picker-title">Try another mascot</h2>
+        <button type="button" class="picker-toggle" id="picker-toggle" aria-expanded="true" aria-controls="picker-body">
+          Hide
+        </button>
+      </div>
+      <div id="picker-body" class="picker-body">
+        <div class="picker-chips" id="picker-chips" role="group" aria-label="Mascots"></div>
+        <div class="picker-sizebox">
+          <label class="picker-size" for="mascot-size">Mascot size: <strong id="mascot-size-value">200</strong>px</label>
+          <input id="mascot-size" type="range" min="80" max="280" step="10" value="200" />
+        </div>
+        <div class="picker-actions">
+          <button type="button" class="btn btn-solid btn-small" id="copy-embed">Copy embed code</button>
+          <a class="btn btn-small" href="index.html#gallery">Open gallery</a>
+          <a class="btn btn-small" href="index.html">Make your own</a>
+        </div>
+        <p class="picker-status" id="picker-status" role="status"></p>
+      </div>
+    </aside>
+
+    <script type="module" src="/src/demo/main.ts"></script>
+  </body>
+</html>

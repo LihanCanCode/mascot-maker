@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mascot studio</title>
+<meta name="description" content="Code-drawn mascot rig: builds the directions and reactions sheets in the browser.">
+<style>
+:root {
+  --ink: #2b1d33; --paper: #e9e6f4; --panel: #f7f5fd; --line: #cfc8e6; --muted: #6a5f7d;
+  --accent: #e23a6e; --accent-ink: #fff; --focus: #1b6fe0; --check-a: #ffffff; --check-b: #ddd8ee;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #f1ecfa; --paper: #15111b; --panel: #211b2a; --line: #3a3048; --muted: #a79bbb;
+    --accent: #ff6b97; --accent-ink: #25101a; --focus: #7fb2ff; --check-a: #2c2438; --check-b: #261f31;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #f1ecfa; --paper: #15111b; --panel: #211b2a; --line: #3a3048; --muted: #a79bbb;
+  --accent: #ff6b97; --accent-ink: #25101a; --focus: #7fb2ff; --check-a: #2c2438; --check-b: #261f31;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.45 "Avenir Next", "Trebuchet MS", ui-rounded, system-ui, sans-serif; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 2px solid var(--line); }
+h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1rem; margin: 0 0 8px; }
+.sub { color: var(--muted); margin: 2px 0 0; font-size: .9rem; }
+main { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 24px; padding: 24px; max-width: 1400px; margin: 0 auto; }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 16px; } }
+.panel { background: var(--panel); border: 2px solid var(--line); border-radius: 16px; padding: 16px; }
+.controls { align-self: start; display: grid; gap: 16px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+button, select, input[type=color] { font: inherit; color: var(--ink); }
+.chip, .btn { border: 2px solid var(--ink); background: var(--panel); border-radius: 999px; padding: 6px 14px; cursor: pointer; min-height: 40px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--ink); font-weight: 700; box-shadow: 3px 3px 0 var(--ink); }
+.btn.primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+label { display: grid; gap: 4px; font-size: .85rem; color: var(--muted); }
+select { background: var(--paper); border: 2px solid var(--line); border-radius: 8px; padding: 6px; min-height: 40px; }
+input[type=color] { width: 100%; height: 40px; border: 2px solid var(--line); border-radius: 8px; background: var(--paper); padding: 2px; }
+.check { display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: .95rem; min-height: 32px; }
+.check input { width: 20px; height: 20px; accent-color: var(--accent); }
+.stage-wrap { display: grid; gap: 24px; }
+.live { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+@media (max-width: 600px) { .live { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+.mascot { position: relative; width: min(60vw, 280px); aspect-ratio: 1; border: 0; padding: 0; background: transparent; cursor: pointer; border-radius: 24px; touch-action: manipulation; }
+.layer { position: absolute; inset: 0; background-size: 300% 300%; background-repeat: no-repeat; pointer-events: none; }
+.layer.react { opacity: 0; transition: opacity .12s; }
+.layer.react.on { opacity: 1; }
+.sheets { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 1000px) { .sheets { grid-template-columns: 1fr; } }
+.sheet { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 2px solid var(--line);
+  background: conic-gradient(var(--check-a) 25%, var(--check-b) 0 50%, var(--check-a) 0 75%, var(--check-b) 0) 0 0 / 28px 28px; }
+.sheet canvas { display: block; width: 100%; height: 100%; }
+.sheet::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to right, transparent calc(33.33% - 1px), rgba(128,128,160,.35) 0 calc(33.33% + 1px), transparent 0 calc(66.66% - 1px), rgba(128,128,160,.35) 0 calc(66.66% + 1px), transparent 0),
+              linear-gradient(to bottom, transparent calc(33.33% - 1px), rgba(128,128,160,.35) 0 calc(33.33% + 1px), transparent 0 calc(66.66% - 1px), rgba(128,128,160,.35) 0 calc(66.66% + 1px), transparent 0); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.status { color: var(--muted); font-size: .85rem; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Mascot studio</h1>
+    <p class="sub">Every pixel is drawn by code. Pick a character, tweak it, download the two sheets.</p>
+  </div>
+  <button class="chip" id="theme" type="button" aria-pressed="false">Dark mode</button>
+</header>
+<main>
+  <section class="panel controls" aria-label="Character controls">
+    <div>
+      <h2>Presets</h2>
+      <div class="presets" id="presets" role="group" aria-label="Preset characters"></div>
+    </div>
+    <div class="grid2" id="fields"></div>
+    <label class="check"><input type="checkbox" id="blush"> Cheek blush</label>
+    <div>
+      <label class="check"><input type="checkbox" id="green"> Download on green (#00FF00) background</label>
+      <div class="presets" style="margin-top:8px">
+        <button class="btn primary" id="dl-dir" type="button">Download directions.png</button>
+        <button class="btn primary" id="dl-rea" type="button">Download reactions.png</button>
+      </div>
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <div class="stage-wrap">
+    <section class="panel live" aria-label="Live mascot">
+      <button class="mascot" id="mascot" type="button" aria-label="Boop the mascot">
+        <span class="layer" id="l-dir"></span>
+        <span class="layer react" id="l-rea"></span>
+      </button>
+      <div>
+        <h2>Live preview</h2>
+        <p class="sub">Move your pointer around: the head follows using the directions sheet. Press the mascot to cycle through the nine reactions. It is the same background-position trick the app uses.</p>
+        <p class="status" id="reaction-name" aria-live="polite">Reaction: none</p>
+      </div>
+    </section>
+    <section class="sheets" aria-label="Generated sheets">
+      <div class="panel"><div class="row"><h2>Directions, 1536 x 1536</h2></div>
+        <div class="sheet"><canvas id="c-dir" width="1536" height="1536" role="img" aria-label="Directions sheet: nine head turns in a 3 by 3 grid"></canvas></div></div>
+      <div class="panel"><div class="row"><h2>Reactions, 1536 x 1536</h2></div>
+        <div class="sheet"><canvas id="c-rea" width="1536" height="1536" role="img" aria-label="Reactions sheet: nine expressions in a 3 by 3 grid"></canvas></div></div>
+    </section>
+  </div>
+</main>
+<script type="module">
+import { renderSheet, DEFAULTS, mergeConfig, REACTIONS } from './rig.js'
+import { PRESETS } from './presets.js'
+
+const $ = (id) => document.getElementById(id)
+const make = (w, h) => Object.assign(document.createElement('canvas'), { width: w, height: h })
+const SELECTS = {
+  ears: ['human', 'cat', 'bear', 'fox', 'bunny', 'bolt'], hairStyle: ['none', 'messy', 'bob', 'buzz', 'bun', 'ponytail'],
+  glasses: ['none', 'round', 'square'], facialHair: ['none', 'stubble', 'moustache', 'beard'],
+  headwear: ['none', 'cap', 'beanie', 'antenna'], neckline: ['crew', 'v', 'boat', 'turtle', 'collar', 'scarf'],
+  shirtDetail: ['none', 'stripe', 'badge'], headShape: ['round', 'square'],
+}
+const LABELS = { ears: 'Ears', hairStyle: 'Hair style', glasses: 'Glasses', facialHair: 'Facial hair', headwear: 'Headwear', neckline: 'Neckline', shirtDetail: 'Shirt detail', headShape: 'Head shape' }
+const COLORS = { skin: 'Skin or fur', hairColor: 'Hair colour', eyeColor: 'Eyes', shirt: 'Shirt', accent: 'Accent', headwearColor: 'Headwear' }
+
+let cfg = mergeConfig(PRESETS.fox)
+let activePreset = 'fox'
+
+// ---- build controls
+const fields = $('fields')
+for (const [k, label] of Object.entries(COLORS)) {
+  const l = document.createElement('label'); l.textContent = label
+  const i = Object.assign(document.createElement('input'), { type: 'color', id: 'f-' + k })
+  i.addEventListener('input', () => { cfg = { ...cfg, [k]: i.value }; activePreset = ''; schedule() })
+  l.append(i); fields.append(l)
+}
+for (const [k, opts] of Object.entries(SELECTS)) {
+  const l = document.createElement('label'); l.textContent = LABELS[k]
+  const s = Object.assign(document.createElement('select'), { id: 'f-' + k })
+  for (const o of opts) s.append(new Option(o, o))
+  s.addEventListener('change', () => { cfg = { ...cfg, [k]: s.value }; activePreset = ''; schedule() })
+  l.append(s); fields.append(l)
+}
+$('blush').addEventListener('change', (e) => { cfg = { ...cfg, blush: e.target.checked }; activePreset = ''; schedule() })
+function syncControls() {
+  for (const k of Object.keys(COLORS)) $('f-' + k).value = cfg[k]
+  for (const k of Object.keys(SELECTS)) $('f-' + k).value = cfg[k]
+  $('blush').checked = !!cfg.blush
+  document.querySelectorAll('#presets .chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.name === activePreset)))
+}
+for (const [name, p] of Object.entries(PRESETS)) {
+  const b = Object.assign(document.createElement('button'), { type: 'button', className: 'chip', textContent: p.label })
+  b.dataset.name = name; b.setAttribute('aria-pressed', 'false')
+  b.addEventListener('click', () => { cfg = mergeConfig(p); activePreset = name; schedule() })
+  $('presets').append(b)
+}
+
+// ---- rendering
+let pending = 0
+function schedule() { cancelAnimationFrame(pending); pending = requestAnimationFrame(render); syncControls() }
+let urls = { dir: '', rea: '' }
+async function render() {
+  const t0 = performance.now()
+  const dir = renderSheet(cfg, 'directions', { createCanvas: make })
+  const rea = renderSheet(cfg, 'reactions', { createCanvas: make })
+  $('c-dir').getContext('2d').clearRect(0, 0, 1536, 1536); $('c-dir').getContext('2d').drawImage(dir, 0, 0)
+  $('c-rea').getContext('2d').clearRect(0, 0, 1536, 1536); $('c-rea').getContext('2d').drawImage(rea, 0, 0)
+  const blobs = await Promise.all([dir, rea].map((c) => new Promise((r) => c.toBlob(r, 'image/png'))))
+  Object.values(urls).forEach((u) => u && URL.revokeObjectURL(u))
+  urls = { dir: URL.createObjectURL(blobs[0]), rea: URL.createObjectURL(blobs[1]) }
+  $('l-dir').style.backgroundImage = `url(${urls.dir})`
+  $('l-rea').style.backgroundImage = `url(${urls.rea})`
+  $('status').textContent = `Rendered both sheets in ${Math.round(performance.now() - t0)} ms.`
+  document.documentElement.dataset.ready = '1'
+}
+
+// ---- live mascot: same maths as the app (3x3 sheet, background-position in 0/50/100 %)
+const pos = (i) => `${(i % 3) * 50}% ${Math.floor(i / 3) * 50}%`
+function look(clientX, clientY) {
+  const r = $('mascot').getBoundingClientRect()
+  const dead = r.width * 0.3
+  const dx = clientX - (r.left + r.width / 2), dy = clientY - (r.top + r.height / 2)
+  const col = dx < -dead ? 0 : dx > dead ? 2 : 1, row = dy < -dead ? 0 : dy > dead ? 2 : 1
+  $('l-dir').style.backgroundPosition = pos(row * 3 + col)
+}
+addEventListener('pointermove', (e) => look(e.clientX, e.clientY))
+$('l-dir').style.backgroundPosition = pos(4)
+let react = -1, reactTimer = 0
+$('mascot').addEventListener('click', () => {
+  react = (react + 1) % REACTIONS.length
+  $('l-rea').style.backgroundPosition = pos(react); $('l-rea').classList.add('on')
+  $('reaction-name').textContent = `Reaction: ${REACTIONS[react]}`
+  clearTimeout(reactTimer); reactTimer = setTimeout(() => $('l-rea').classList.remove('on'), 1400)
+})
+
+// ---- downloads (re-render on green when asked; transparent otherwise)
+function download(kind, name) {
+  const bg = $('green').checked ? '#00FF00' : 'transparent'
+  const cv = renderSheet(cfg, kind, { createCanvas: make, background: bg })
+  cv.toBlob((b) => {
+    const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(b), download: name })
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+    $('status').textContent = `Saved ${name} (${bg === 'transparent' ? 'transparent' : 'green key'}).`
+  }, 'image/png')
+}
+$('dl-dir').addEventListener('click', () => download('directions', 'directions.png'))
+$('dl-rea').addEventListener('click', () => download('reactions', 'reactions.png'))
+
+// ---- theme
+$('theme').addEventListener('click', () => {
+  const root = document.documentElement
+  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+  root.dataset.theme = dark ? 'light' : 'dark'
+  $('theme').setAttribute('aria-pressed', String(!dark)); $('theme').textContent = dark ? 'Dark mode' : 'Light mode'
+})
+void DEFAULTS
+schedule()
+</script>
+</body>
+</html>

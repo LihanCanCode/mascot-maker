@@ -1,0 +1,180 @@
+/* Mode switch, header actions and the gallery. Tokens live in src/index.css. */
+
+.site-header {
+  flex-wrap: wrap;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.modeswitch {
+  display: inline-flex;
+  border: var(--stroke) solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.modeswitch-btn {
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  font: inherit;
+  font-weight: 800;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.modeswitch-btn + .modeswitch-btn {
+  border-left: var(--stroke) solid var(--line);
+}
+
+.modeswitch-btn[aria-pressed='true'] {
+  background: var(--violet);
+  color: var(--violet-ink);
+}
+
+.btn-quiet {
+  text-decoration: none;
+}
+
+.gallery-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--s-4) var(--s-5);
+  margin-bottom: var(--s-3);
+}
+
+.gallery-search {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.chip {
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  font: inherit;
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--surface);
+  border: var(--stroke) solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--sun);
+  color: var(--sun-ink);
+  box-shadow: var(--pop-small);
+}
+
+.gallery-count {
+  margin: 0 0 var(--s-3);
+}
+
+.ggrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: var(--s-4);
+  list-style: none;
+  margin: 0 0 var(--s-5);
+  padding: 0;
+}
+
+.gcard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  width: 100%;
+  padding: var(--s-2) var(--s-2) var(--s-3);
+  font: inherit;
+  text-align: center;
+  color: var(--ink);
+  background: var(--surface);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--pop-small);
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.gcard:hover {
+  transform: translate(-1px, -2px);
+  box-shadow: 4px 5px 0 var(--line);
+}
+
+.gcard:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.gcard-pose {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: var(--r-md);
+  background-color: var(--surface-2);
+  background-repeat: no-repeat;
+  /* the sheet is 3x3; 300% with a 50% 50% offset shows the centre-facing pose */
+  background-size: 300% 300%;
+  background-position: 50% 50%;
+}
+
+.gcard-name {
+  font-weight: 800;
+  font-size: var(--t-lg);
+  line-height: 1.2;
+}
+
+.gcard-tag {
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.credit {
+  margin-top: var(--s-5);
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+}
+
+.seg.seg-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.seg-wrap .seg-item,
+.seg-wrap .seg-item + .seg-item {
+  min-width: 4.5rem;
+  border: var(--stroke) solid var(--line);
+  border-radius: 999px;
+}
+
+.gallery-detail > .btn {
+  margin-bottom: var(--s-4);
+}
+
+@media (max-width: 719px) {
+  .ggrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+}

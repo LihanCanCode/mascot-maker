@@ -1,0 +1,234 @@
+/* Step-specific layout. Single column below 720px. */
+
+.step > .lede {
+  font-size: var(--t-lg);
+  color: var(--ink-soft);
+}
+
+.step .actions {
+  margin-top: var(--s-5);
+}
+
+.prompts,
+.dropzones,
+.grids,
+.export-grid {
+  display: grid;
+  gap: var(--s-5);
+  grid-template-columns: 1fr;
+}
+
+.dropzone-wrap h3 {
+  margin-bottom: var(--s-2);
+}
+
+.mirror-pair {
+  flex-wrap: wrap;
+  display: flex;
+  gap: var(--s-4);
+  margin-bottom: var(--s-4);
+}
+
+.mirror-pair figure {
+  margin: 0;
+  width: 9rem;
+}
+
+.mirror-pair .mirror-canvas {
+  aspect-ratio: 1;
+  background: repeating-conic-gradient(var(--checker-a) 0 25%, var(--checker-b) 0 50%) 0 0 / 14px 14px;
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.mirror-pair figcaption {
+  margin-top: var(--s-1);
+  font-weight: 700;
+  font-size: var(--t-sm);
+}
+
+.switch-state {
+  padding: 0 var(--s-2);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: var(--t-sm);
+}
+
+[role='switch'][aria-checked='true'] .switch-state {
+  background: var(--sun);
+  color: var(--sun-ink);
+}
+
+.stage {
+  display: grid;
+  place-items: center;
+  min-height: 20rem;
+  padding: var(--s-5);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--pop);
+  background: #f7f5ff;
+  color: #1b1740;
+}
+
+.stage[data-bg='dark'] {
+  background: #14112b;
+  color: #f0eeff;
+}
+
+.stage[data-bg='checker'] {
+  background: repeating-conic-gradient(#ffffff 0 25%, #d9d4f5 0 50%) 0 0 / 20px 20px;
+}
+
+.stage-wrap p {
+  margin-top: var(--s-3);
+}
+
+.controls {
+  align-self: start;
+}
+
+.seg {
+  display: inline-flex;
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.seg-item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 5.5rem;
+  min-height: 44px;
+  padding: 0 var(--s-3);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.seg-item + .seg-item {
+  border-left: var(--stroke) solid var(--line);
+}
+
+.seg-item input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.seg-item:has(input:checked) {
+  background: var(--violet);
+  color: var(--violet-ink);
+}
+
+.seg-item:has(input:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
+}
+
+.downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stage-line {
+  font-weight: 800;
+}
+
+@media (min-width: 720px) {
+  .prompts,
+  .dropzones,
+  .grids {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .export-grid {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+}
+
+@media (max-width: 719px) {
+  .stepnav ol {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  main {
+    padding-top: var(--s-3);
+  }
+
+  .sticker {
+    padding: var(--s-4);
+  }
+
+  .stage {
+    min-height: 16rem;
+  }
+}
+
+/* the preview stage fixes its own colours, so helper text must follow them */
+.stage .muted {
+  color: inherit;
+}
+
+/* loading placeholders on the export step */
+.skeleton {
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 4px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-top-color: color-mix(in srgb, currentColor 25%, transparent);
+    border-right-color: currentColor;
+  }
+}
+
+.skeleton-btn {
+  width: 11rem;
+  height: 44px;
+  border: var(--stroke) dashed var(--line);
+  border-radius: var(--r-md);
+  opacity: 0.6;
+}
+
+.grids {
+  margin-bottom: var(--s-6);
+}
+
+.issues {
+  margin-bottom: var(--s-5);
+}
+
+.mirror-pair .mirror-canvas {
+  height: auto;
+}
+
+.mirror-pair figure {
+  display: flex;
+  flex-direction: column;
+}

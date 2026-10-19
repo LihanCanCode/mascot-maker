@@ -1,0 +1,6 @@
+export { detectBackground, hasExistingAlpha, isKeyable, noiseTolerance } from './background'
+export { detectCheckerboard } from './checkerboard'
+export { removeCornerMarks } from './cornerMarks'
+export { keyOut } from './keyOut'
+export { keySheet } from './keySheet'
+export { featherAlpha, suppressSpill } from './spill'
