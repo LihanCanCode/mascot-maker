@@ -27,3 +27,7 @@ src/core/real/
 e2e/fixtures/real/
 Gemini_Generated_Image_*.jpg
 *.personal.*
+
+# Launch media: films and stills, plus the studio-drawn input sheets they are
+# built from. All reproducible from the committed scripts.
+/media/

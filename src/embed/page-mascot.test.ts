@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { sectorFor as reactSectorFor } from '../mascot/Mascot'
+import { BOOP_TIMING, sectorFor as reactSectorFor } from '../mascot/Mascot'
 import { definePageMascot, sectorFor } from './page-mascot.js'
 import script from './page-mascot.js?raw'
 
@@ -203,5 +203,32 @@ describe('without optional browser APIs', () => {
     const el = make()
     button(el).click()
     expect(layers(el)[1]?.style.backgroundPosition).toBe('0% 0%')
+  })
+})
+
+describe('timing parity with Mascot.tsx', () => {
+  it('uses the same boop timetable the React component exports', () => {
+    const number = (name: string): number => {
+      const found = new RegExp(`var ${name} = ([0-9]+)`).exec(script)
+      if (!found?.[1]) throw new Error(`page-mascot.js has no ${name}`)
+      return Number(found[1])
+    }
+    expect({
+      payoffAt: number('BOOP_PAYOFF'),
+      endAt: number('BOOP_END'),
+      dizzyAfter: number('DIZZY_AFTER'),
+      dizzyWindow: number('DIZZY_WINDOW'),
+      dizzyEnd: number('DIZZY_END'),
+      squashMs: number('SQUASH_MS'),
+    }).toEqual({
+      payoffAt: BOOP_TIMING.payoffAt,
+      endAt: BOOP_TIMING.endAt,
+      dizzyAfter: BOOP_TIMING.dizzyAfter,
+      dizzyWindow: BOOP_TIMING.dizzyWindow,
+      dizzyEnd: BOOP_TIMING.dizzyEnd,
+      squashMs: BOOP_TIMING.squashMs,
+    })
+    const payoffs = /var PAYOFFS = \[([^\]]+)\]/.exec(script)?.[1] ?? ''
+    expect(payoffs.replace(/['\s]/g, '').split(',')).toEqual([...BOOP_TIMING.payoffs])
   })
 })
