@@ -45,3 +45,16 @@ describe('useMode', () => {
     expect(result.current.mode).toBe('gallery')
   })
 })
+
+describe('useMode and the saved gallery', () => {
+  it('reads and writes #saved like the other modes', () => {
+    expect(modeFromHash('#saved')).toBe('saved')
+    window.history.replaceState(null, '', '/#saved')
+    const { result } = renderHook(() => useMode())
+    expect(result.current.mode).toBe('saved')
+    act(() => result.current.setMode('gallery'))
+    expect(window.location.hash).toBe('#gallery')
+    act(() => result.current.setMode('saved'))
+    expect(window.location.hash).toBe('#saved')
+  })
+})

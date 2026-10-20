@@ -1,0 +1,116 @@
+/* "My gallery": the visitor's own saved mascots. Tokens live in src/index.css. */
+
+.sgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--s-4);
+  list-style: none;
+  margin: 0 0 var(--s-5);
+  padding: 0;
+}
+
+.scard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-1);
+  padding: var(--s-3);
+  text-align: center;
+  background: var(--surface);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--pop-small);
+}
+
+.scard-stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.scard-name {
+  margin: 0;
+  font-weight: 800;
+}
+
+.scard-date {
+  margin: 0;
+  font-size: var(--t-sm);
+}
+
+.scard-missing {
+  margin: 0;
+  font-size: var(--t-sm);
+}
+
+.saved-empty {
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+}
+
+.saved-notice:empty {
+  display: none;
+}
+
+.saved-tools {
+  display: grid;
+  gap: var(--s-3);
+  justify-items: start;
+}
+
+.saved-tools p {
+  margin: 0;
+  max-width: 60ch;
+}
+
+.saved-tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--s-4);
+}
+
+.saved-tool-row .field {
+  margin: 0;
+}
+
+.save-mine {
+  display: grid;
+  gap: var(--s-2);
+  justify-items: start;
+  margin-top: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: var(--stroke) dashed var(--line);
+}
+
+.save-mine p {
+  margin: 0;
+  max-width: 60ch;
+}
+
+.save-mine-status:empty {
+  display: none;
+}
+
+.confirm {
+  display: grid;
+  gap: var(--s-2);
+  justify-items: start;
+  padding: var(--s-3);
+  background: var(--bad-bg);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.confirm p {
+  margin: 0;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+@media (max-width: 30rem) {
+  .sgrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

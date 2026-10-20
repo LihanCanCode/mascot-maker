@@ -9,16 +9,18 @@ import { useEncodedSheets } from '../hooks/useEncodedSheets'
 import { useObjectUrls } from '../hooks/useObjectUrls'
 import { type AppAction, type AppState, type UiOptions } from '../state/appReducer'
 import { adaptSnippetExtension, extensionFor, sheetFileName } from './exportHelpers'
+import { SaveToGallery, type SaveSheets } from './SaveToGallery'
 
 interface Props {
   state: Extract<AppState, { step: 'export' }>
   dispatch: Dispatch<AppAction>
   onRerun: () => void
+  onViewSaved: () => void
 }
 
 const UPSCALE_TOLERANCE = 1.25
 
-export function ExportStep({ state, dispatch, onRerun }: Props) {
+export function ExportStep({ state, dispatch, onRerun, onViewSaved }: Props) {
   const { brief, options, result } = state
   const encoded = useEncodedSheets(result.output)
   const blobs = useMemo(
@@ -26,6 +28,13 @@ export function ExportStep({ state, dispatch, onRerun }: Props) {
     [encoded],
   )
   const [directionsUrl, reactionsUrl] = useObjectUrls(blobs)
+  const saveSheets = useMemo<SaveSheets | null>(
+    () =>
+      encoded.status === 'ready'
+        ? { directions: encoded.directions.blob, reactions: encoded.reactions.blob, mimeType: encoded.directions.mimeType }
+        : null,
+    [encoded],
+  )
 
   const displayName = brief.name.trim() || 'mascot'
   const slug = slugify(displayName)
@@ -142,6 +151,7 @@ export function ExportStep({ state, dispatch, onRerun }: Props) {
             ))}
           </ul>
         )}
+        <SaveToGallery brief={brief} cellSize={result.output.cellSize} sheets={saveSheets} onViewGallery={onViewSaved} />
       </section>
 
       <section aria-labelledby="embed-heading" className="sticker">

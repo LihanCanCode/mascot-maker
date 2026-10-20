@@ -121,7 +121,7 @@ test.describe('f) gallery', () => {
   test('mode switch and header links', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('button', { name: 'Make my own' })).toHaveAttribute('aria-pressed', 'true')
-    await page.getByRole('button', { name: 'Gallery' }).click()
+    await page.getByRole('button', { name: 'Gallery', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Pick a ready-made mascot' })).toBeFocused()
     await expect(page).toHaveURL(/#gallery$/)
     await expect(page.getByRole('navigation', { name: 'Progress' })).toHaveCount(0)

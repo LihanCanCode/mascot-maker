@@ -40,6 +40,12 @@ photo goes to that provider under their terms, and never to us.
 A gallery of ready-made characters is included for people who do not want to generate anything; it
 is [Kamran Ahmed's artwork](public/mascots/CREDITS.txt), not this project's.
 
+Finished mascots can be kept: **Save to my gallery** on the export step puts one in **My gallery**
+(`#saved`), an IndexedDB store in your own browser. Still no server and no account, which also means
+it lives in that one browser on that one device and goes away with your site data — so the gallery
+says so plainly, shows the space it uses, and can write the whole thing to a single JSON file you
+can keep and import back anywhere.
+
 > **About the pictures in this README.** Every sheet shown below was drawn by this repository's own
 > `src/studio` code and rendered onto the flat green the prompts ask for, so that the documentation
 > contains no photograph of a real person and no borrowed artwork. They stand in for what a chat

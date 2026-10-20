@@ -1,6 +1,7 @@
 @import './ui/styles/components.css';
 @import './ui/styles/steps.css';
 @import './gallery/gallery.css';
+@import './saved/saved.css';
 
 /*
   Mascot Maker design tokens.

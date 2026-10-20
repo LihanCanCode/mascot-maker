@@ -24,7 +24,7 @@ export default defineConfig({
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
     coverage: {
       provider: 'v8',
-      include: ['src/core/**', 'src/prompts/**', 'src/embed/**', 'src/ui/state/**', 'src/adapters/fileCheck.ts'],
+      include: ['src/core/**', 'src/prompts/**', 'src/embed/**', 'src/ui/state/**', 'src/saved/**', 'src/adapters/fileCheck.ts'],
       exclude: ['**/__fixtures__/**', 'src/core/types.ts', '**/*.test.ts', '**/*.test.tsx'],
       thresholds: { lines: 80, functions: 80, branches: 80 },
     },

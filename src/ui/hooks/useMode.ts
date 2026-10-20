@@ -1,23 +1,26 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export type Mode = 'make' | 'gallery'
+export type Mode = 'make' | 'gallery' | 'saved'
 
-const GALLERY_HASH = '#gallery'
+const HASHES: Readonly<Record<string, Mode>> = { '#gallery': 'gallery', '#saved': 'saved', '': 'make' }
 
 export function modeFromHash(hash: string): Mode {
-  return hash === GALLERY_HASH ? 'gallery' : 'make'
+  return HASHES[hash] ?? 'make'
 }
 
-/** Top-level mode, mirrored in the URL hash so "index.html#gallery" can be linked to. */
+function hashFor(mode: Mode): string {
+  return mode === 'make' ? '' : `#${mode}`
+}
+
+/** Top-level mode, mirrored in the URL hash so "index.html#saved" can be linked to. */
 export function useMode(): { mode: Mode; setMode: (mode: Mode) => void } {
   const [mode, setModeState] = useState<Mode>(() => modeFromHash(window.location.hash))
 
   useEffect(() => {
     // Only the mode's own hashes switch it, so in-page links like the skip link (#main) are ignored.
     const onHashChange = (): void => {
-      const { hash } = window.location
-      if (hash === GALLERY_HASH) setModeState('gallery')
-      else if (hash === '') setModeState('make')
+      const known = HASHES[window.location.hash]
+      if (known !== undefined) setModeState(known)
     }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
@@ -26,7 +29,7 @@ export function useMode(): { mode: Mode; setMode: (mode: Mode) => void } {
   const setMode = useCallback((next: Mode) => {
     setModeState(next)
     const { pathname, search } = window.location
-    window.history.replaceState(null, '', next === 'gallery' ? `${pathname}${search}${GALLERY_HASH}` : `${pathname}${search}`)
+    window.history.replaceState(null, '', `${pathname}${search}${hashFor(next)}`)
   }, [])
 
   return { mode, setMode }

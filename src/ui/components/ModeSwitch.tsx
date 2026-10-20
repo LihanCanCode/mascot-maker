@@ -8,6 +8,7 @@ interface Props {
 const MODES: readonly { id: Mode; label: string }[] = [
   { id: 'make', label: 'Make my own' },
   { id: 'gallery', label: 'Gallery' },
+  { id: 'saved', label: 'My gallery' },
 ]
 
 export function ModeSwitch({ mode, onChange }: Props) {

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, type Dispatch } from 'react'
 import type { RedoTarget } from './core/types'
 import { GalleryView } from './gallery/GalleryView'
+import { SavedView } from './saved/SavedView'
 import { ModeSwitch } from './ui/components/ModeSwitch'
 import { StepNav } from './ui/components/StepNav'
 import { ThemeToggle } from './ui/components/ThemeToggle'
@@ -14,6 +15,11 @@ import { ExportStep } from './ui/steps/ExportStep'
 import { ReviewStep } from './ui/steps/ReviewStep'
 import { SetupStep } from './ui/steps/SetupStep'
 import { UploadStep } from './ui/steps/UploadStep'
+
+const MODE_TITLES: Readonly<Record<string, string>> = {
+  gallery: 'Gallery - Mascot Maker',
+  saved: 'My gallery - Mascot Maker',
+}
 
 function PrivacyLine() {
   return (
@@ -41,12 +47,13 @@ function useStepFocus(focusKey: string, pendingTarget: { current: string | null 
   }, [focusKey, pendingTarget])
 }
 
-function StepView({ state, dispatch, start, onShowPrompt, onRequestFocus }: {
+function StepView({ state, dispatch, start, onShowPrompt, onRequestFocus, onViewSaved }: {
   state: AppState
   dispatch: Dispatch<AppAction>
   start: () => void
   onShowPrompt: (redo: RedoTarget) => void
   onRequestFocus: (id: string) => void
+  onViewSaved: () => void
 }) {
   switch (state.step) {
     case 'setup':
@@ -57,7 +64,7 @@ function StepView({ state, dispatch, start, onShowPrompt, onRequestFocus }: {
     case 'review':
       return <ReviewStep state={state} dispatch={dispatch} onRerun={start} onShowPrompt={onShowPrompt} onRequestFocus={onRequestFocus} />
     case 'export':
-      return <ExportStep state={state} dispatch={dispatch} onRerun={start} />
+      return <ExportStep state={state} dispatch={dispatch} onRerun={start} onViewSaved={onViewSaved} />
   }
 }
 
@@ -69,7 +76,7 @@ export function App() {
   useRevokeOnRemoval(previewUrls(state.files))
   const { mode, setMode } = useMode()
   useStepFocus(`${mode}:${state.step}`, pendingTarget)
-  const title = mode === 'gallery' ? 'Gallery - Mascot Maker' : stepTitle(state)
+  const title = MODE_TITLES[mode] ?? stepTitle(state)
   useEffect(() => {
     document.title = title
   }, [title])
@@ -87,6 +94,8 @@ export function App() {
   const requestFocus = useCallback((id: string) => {
     pendingTarget.current = id
   }, [])
+
+  const viewSaved = useCallback(() => setMode('saved'), [setMode])
 
   return (
     <>
@@ -114,8 +123,10 @@ export function App() {
       <main id="main" tabIndex={-1}>
         {mode === 'gallery' ? (
           <GalleryView onMakeOwn={makeOwn} />
+        ) : mode === 'saved' ? (
+          <SavedView onMakeOwn={makeOwn} />
         ) : (
-          <StepView state={state} dispatch={dispatch} start={start} onShowPrompt={showPrompt} onRequestFocus={requestFocus} />
+          <StepView state={state} dispatch={dispatch} start={start} onShowPrompt={showPrompt} onRequestFocus={requestFocus} onViewSaved={viewSaved} />
         )}
       </main>
       <footer className="site-footer">
