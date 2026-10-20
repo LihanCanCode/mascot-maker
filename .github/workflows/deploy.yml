@@ -1,0 +1,51 @@
+# Builds the site and publishes it to GitHub Pages on every push to main.
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# The deploy step needs to mint an id-token for Pages; nothing else writes.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# A newer push supersedes one already in flight, but never cancels a deploy
+# that has started, which would leave the site half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          # A project site lives under /<repo>/, so the assets need that prefix.
+          BASE_PATH: /mascot-maker/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
