@@ -23,17 +23,19 @@ export function useStarAsk(ready: boolean, storage?: StarStorage | null): StarAs
     if (!ready || decided.current) return
     decided.current = true
     if (!shouldAsk(store.current)) return
-    remember(store.current, 'asked')
+    remember(store.current)
     setOpen(true)
   }, [ready])
 
-  const close = useCallback((mark: 'dismissed' | 'starred') => {
-    remember(store.current, mark)
+  // Both answers are the same answer: do not ask again. The mark is already
+  // down from the moment it opened, so these only close the card.
+  const close = useCallback(() => {
+    remember(store.current)
     setOpen(false)
   }, [])
 
-  const dismiss = useCallback(() => close('dismissed'), [close])
-  const follow = useCallback(() => close('starred'), [close])
+  const dismiss = close
+  const follow = close
 
   return { open, dismiss, follow }
 }

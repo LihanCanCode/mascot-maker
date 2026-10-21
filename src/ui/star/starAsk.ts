@@ -23,11 +23,8 @@ export const STAR_URL = 'https://github.com/LihanCanCode/mascot-maker'
 /** The one storage key this feature owns. */
 export const STAR_KEY = 'mascot-maker.star-ask'
 
-/**
- * What happened, kept for the record rather than for the rule: `asked` is
- * written the moment the ask is shown, so five mascots still mean one ask.
- */
-export type StarMark = 'asked' | 'dismissed' | 'starred'
+/** The one value ever written. Only its presence is read; it never varies. */
+export const STAR_MARK = 'asked'
 
 /** The slice of `Storage` this needs, so a test can hand over a map or a trap. */
 export interface StarStorage {
@@ -56,10 +53,10 @@ export function shouldAsk(storage: StarStorage | null): boolean {
 }
 
 /** Note that the ask has happened. A storage that refuses is not an error. */
-export function remember(storage: StarStorage | null, mark: StarMark): void {
+export function remember(storage: StarStorage | null): void {
   if (storage === null) return
   try {
-    storage.setItem(STAR_KEY, mark)
+    storage.setItem(STAR_KEY, STAR_MARK)
   } catch {
     // Storage is unavailable. The ask is already hidden for this visit, which
     // is as much as can be promised without somewhere to write.

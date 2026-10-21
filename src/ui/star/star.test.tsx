@@ -4,7 +4,7 @@ import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { StarPrompt } from './StarPrompt'
 import { StarLink } from './StarLink'
-import { STAR_KEY, STAR_URL, type StarStorage } from './starAsk'
+import { STAR_KEY, STAR_MARK, STAR_URL, type StarStorage } from './starAsk'
 
 afterEach(() => {
   cleanup()
@@ -56,7 +56,7 @@ describe('StarPrompt', () => {
   it('marks the visitor as asked the moment it is shown, so a second mascot is not a second ask', () => {
     const storage = store()
     render(<StarPrompt ready storage={storage} />)
-    expect(storage.read()).toBe('asked')
+    expect(storage.read()).toBe(STAR_MARK)
 
     cleanup()
     render(<StarPrompt ready storage={storage} />)
@@ -73,14 +73,14 @@ describe('StarPrompt', () => {
     render(<StarPrompt ready storage={storage} />)
     await userEvent.click(screen.getByRole('button', { name: 'No thanks, do not ask again' }))
     expect(screen.queryByRole('link', { name: /Star Mascot Maker/ })).toBeNull()
-    expect(storage.read()).toBe('dismissed')
+    expect(storage.read()).toBe(STAR_MARK)
   })
 
   it('treats following the link as an answer and remembers that too', async () => {
     const storage = store()
     render(<StarPrompt ready storage={storage} />)
     await userEvent.click(screen.getByRole('link', { name: 'Star Mascot Maker on GitHub' }))
-    expect(storage.read()).toBe('starred')
+    expect(storage.read()).toBe(STAR_MARK)
     expect(screen.queryByRole('link', { name: /Star Mascot Maker/ })).toBeNull()
   })
 
@@ -93,7 +93,7 @@ describe('StarPrompt', () => {
     localStorage.clear()
     render(<StarPrompt ready />)
     expect(screen.getByRole('link', { name: 'Star Mascot Maker on GitHub' })).toBeTruthy()
-    expect(localStorage.getItem(STAR_KEY)).toBe('asked')
+    expect(localStorage.getItem(STAR_KEY)).toBe(STAR_MARK)
     localStorage.clear()
   })
 })

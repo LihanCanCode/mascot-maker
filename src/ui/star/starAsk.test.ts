@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
-import { STAR_KEY, STAR_URL, remember, shouldAsk, type StarStorage } from './starAsk'
+import { describe, expect, it } from 'vitest'
+import { STAR_KEY, STAR_MARK, STAR_URL, remember, shouldAsk, type StarStorage } from './starAsk'
 
 /** A storage that behaves, backed by a plain map. */
 function working(seed: Readonly<Record<string, string>> = {}): StarStorage & { readonly written: Map<string, string> } {
@@ -34,11 +34,8 @@ describe('shouldAsk', () => {
     expect(shouldAsk(working({ [STAR_KEY]: 'asked' }))).toBe(false)
   })
 
-  it('does not ask again once it has been dismissed', () => {
+  it('does not ask again once an older version of the mark is there', () => {
     expect(shouldAsk(working({ [STAR_KEY]: 'dismissed' }))).toBe(false)
-  })
-
-  it('does not ask again once the link has been followed', () => {
     expect(shouldAsk(working({ [STAR_KEY]: 'starred' }))).toBe(false)
   })
 
@@ -65,28 +62,27 @@ describe('shouldAsk', () => {
 })
 
 describe('remember', () => {
-  it('writes the mark under the one key', () => {
+  it('writes the one mark under the one key', () => {
     const store = working()
-    remember(store, 'dismissed')
-    expect(store.written.get(STAR_KEY)).toBe('dismissed')
+    remember(store)
+    expect(store.written.get(STAR_KEY)).toBe(STAR_MARK)
     expect(shouldAsk(store)).toBe(false)
   })
 
-  it('lets a later mark replace an earlier one', () => {
+  it('is safe to call twice', () => {
     const store = working()
-    remember(store, 'asked')
-    remember(store, 'starred')
-    expect(store.written.get(STAR_KEY)).toBe('starred')
+    remember(store)
+    remember(store)
+    expect(store.written.size).toBe(1)
+    expect(shouldAsk(store)).toBe(false)
   })
 
   it('swallows a storage that refuses to write', () => {
-    expect(() => remember(throwing(), 'starred')).not.toThrow()
+    expect(() => remember(throwing())).not.toThrow()
   })
 
   it('does nothing, quietly, when there is no storage', () => {
-    const setItem = vi.fn()
-    expect(() => remember(null, 'starred')).not.toThrow()
-    expect(setItem).not.toHaveBeenCalled()
+    expect(() => remember(null)).not.toThrow()
   })
 })
 
