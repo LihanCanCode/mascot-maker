@@ -1,0 +1,74 @@
+/*
+  The two places this project asks to be starred: a quiet link in the header,
+  and one strip at the end of the export step.
+
+  Both are cut from the same sticker sheet as everything else — ink outline,
+  rounded corners, no badge and no logo. The ask is dashed rather than solid so
+  it reads as a note left on the page, not as another step to do.
+*/
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.star-link {
+  padding: var(--s-2) var(--s-3);
+  font-size: var(--t-sm);
+}
+
+.star-glyph {
+  flex: none;
+  transition: fill var(--dur) var(--ease);
+}
+
+.star-link:hover .star-glyph,
+.star-ask-go:hover .star-glyph {
+  fill: var(--sun);
+}
+
+.star-ask {
+  display: grid;
+  gap: var(--s-3);
+  max-width: 42rem;
+  margin: 0 0 var(--s-5);
+  padding: var(--s-4) var(--s-5);
+  background: var(--surface);
+  border: var(--stroke) dashed var(--line);
+  border-radius: var(--r-lg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .star-ask {
+    animation: star-ask-in 220ms var(--ease) both;
+  }
+}
+
+@keyframes star-ask-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.star-ask-words {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--ink-soft);
+}
+
+/* The step stylesheet underlines links inside a step; this one is a button. */
+.star-ask-go {
+  text-decoration: none;
+}
+
+.star-ask-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+  margin: 0;
+}

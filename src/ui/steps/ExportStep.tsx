@@ -10,6 +10,7 @@ import { useObjectUrls } from '../hooks/useObjectUrls'
 import { type AppAction, type AppState, type UiOptions } from '../state/appReducer'
 import { adaptSnippetExtension, extensionFor, sheetFileName } from './exportHelpers'
 import { SaveToGallery, type SaveSheets } from './SaveToGallery'
+import { StarPrompt } from '../star/StarPrompt'
 
 interface Props {
   state: Extract<AppState, { step: 'export' }>
@@ -162,6 +163,8 @@ export function ExportStep({ state, dispatch, onRerun, onViewSaved }: Props) {
           html={adaptSnippetExtension(embed.html, slug, ext)}
         />
       </section>
+
+      <StarPrompt ready={encoded.status === 'ready'} />
 
       <div className="actions">
         <button type="button" className="btn" onClick={() => dispatch({ type: 'nav/goto', step: 'review' })}>

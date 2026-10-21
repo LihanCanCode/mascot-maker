@@ -6,6 +6,10 @@
 
 # Mascot Maker
 
+[![Stars](https://img.shields.io/github/stars/LihanCanCode/mascot-maker?style=flat-square&label=stars&labelColor=1b1740&color=ffcf33)](https://github.com/LihanCanCode/mascot-maker/stargazers)
+[![Live demo](https://img.shields.io/badge/live-demo-4a34d8?style=flat-square&labelColor=1b1740)](https://lihancancode.github.io/mascot-maker/)
+[![Licence: MIT](https://img.shields.io/github/license/LihanCanCode/mascot-maker?style=flat-square&labelColor=1b1740&color=4a34d8)](LICENSE)
+
 **A photo and any free chat model, into a mascot that watches your reader.**
 
 You describe a character and pick a style. The app writes two prompts. You run them in your own
@@ -224,6 +228,10 @@ pnpm run reel     # a 1080x1920 reel and a 1280x720 cut in media/
   sheet about half the time. There is a swap toggle and an explicit prompt to go and look.
 - **The gallery is not this project's work.** The fifty-three characters in `public/mascots` are
   Kamran Ahmed's, under MIT, credited in `public/mascots/CREDITS.txt`.
+
+## If you like it
+
+A [star on GitHub](https://github.com/LihanCanCode/mascot-maker) is how I find out anyone used this. That is the whole ask — there is nothing to sign up for and nothing to pay.
 
 ## Credits and licence
 

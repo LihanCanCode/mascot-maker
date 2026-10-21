@@ -5,6 +5,7 @@ import { SavedView } from './saved/SavedView'
 import { ModeSwitch } from './ui/components/ModeSwitch'
 import { StepNav } from './ui/components/StepNav'
 import { ThemeToggle } from './ui/components/ThemeToggle'
+import { StarLink } from './ui/star/StarLink'
 import { usePipeline } from './ui/hooks/usePipeline'
 import { useMode } from './ui/hooks/useMode'
 import { useRevokeOnRemoval } from './ui/hooks/useObjectUrls'
@@ -116,6 +117,7 @@ export function App() {
           <a className="btn btn-quiet" href="demo.html">
             See it on a page
           </a>
+          <StarLink />
           <ThemeToggle theme={theme} onToggle={toggle} />
         </div>
       </header>
